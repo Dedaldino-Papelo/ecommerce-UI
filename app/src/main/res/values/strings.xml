@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Ecommerce UI</string>
+    <string name="category_name_1">All</string>
+    <string name="category_name_2">Italian</string>
+    <string name="category_name_3">Thai</string>
+    <string name="category_name_4">Asian</string>
+</resources>
