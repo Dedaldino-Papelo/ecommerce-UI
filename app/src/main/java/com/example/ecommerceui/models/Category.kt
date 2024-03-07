@@ -1,4 +1,4 @@
-package com.example.ecommerceui.data
+package com.example.ecommerceui.models
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

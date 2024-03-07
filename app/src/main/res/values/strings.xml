@@ -4,4 +4,15 @@
     <string name="category_name_2">Italian</string>
     <string name="category_name_3">Thai</string>
     <string name="category_name_4">Asian</string>
+
+    <string name="header_title_1">Specials</string>
+    <string name="header_title_2">Recommended</string>
+
+    <string name="product_name_1">Noodles</string>
+    <string name="product_name_2">Pasta</string>
+
+    <string name="product_price_1">7.2</string>
+    <string name="product_price_2">6.2</string>
+    <string name="see_details">See Details</string>
+
 </resources>
