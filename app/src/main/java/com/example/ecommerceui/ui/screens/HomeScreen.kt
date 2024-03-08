@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -74,7 +75,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(36.dp)
             ){
                 items(DataSource.categories){ category ->
                     Category(
@@ -89,7 +90,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ){
                 items(DataSource.products){ product ->
                     ProductItem(
@@ -220,16 +221,21 @@ fun SearchBar(
     TextField(
         value = value ,
         onValueChange = onValueChange,
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = null,
+                tint = Color.Gray) },
         label = { Text(text = "Search")},
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 20.dp),
         shape = RoundedCornerShape(50.dp),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = colorResource(R.color.cardColor),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
-        )
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 20.dp),
     )
 }
 @Composable
