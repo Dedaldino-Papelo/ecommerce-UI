@@ -2,31 +2,39 @@ package com.example.ecommerceui.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,80 +45,142 @@ import com.example.ecommerceui.R
 import com.example.ecommerceui.data.DataSource
 import com.example.ecommerceui.models.Category
 import com.example.ecommerceui.models.Product
+import com.example.ecommerceui.models.Recommended
 import com.example.ecommerceui.ui.theme.EcommerceUITheme
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+    var inputValue by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Column() {
-            Text(text = "Hi James",  style = MaterialTheme.typography.titleLarge)
-            Text(text = "What do you want to order today?",  style = MaterialTheme.typography.bodyLarge)
-        }
-        EditText(
+        Column(
             modifier = Modifier
-        )
-
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ){
-            items(DataSource.categories){ category ->
-                Category(
-                    category = category,
-                    modifier = Modifier
-                )
+                .fillMaxSize()
+                .padding(horizontal = 30.dp)
+        ) {
+            Column() {
+                Text(text = "Hi James",  style = MaterialTheme.typography.titleLarge)
+                Text(text = "What do you want to order today?",  style = MaterialTheme.typography.bodyLarge)
             }
-        }
+            SearchBar(
+                modifier = Modifier,
+                value = inputValue,
+                onValueChange = { inputValue = it }
+            )
 
-        headerTitle(title = R.string.header_title_1)
-
-        LazyRow(){
-            items(DataSource.products){ product ->
-                ProductItem(
-                    product = product
-                )
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ){
+                items(DataSource.categories){ category ->
+                    Category(
+                        category = category,
+                        modifier = Modifier
+                    )
+                }
             }
+
+            headerTitle(title = R.string.header_title_1,)
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                items(DataSource.products){ product ->
+                    ProductItem(
+                        product = product
+                    )
+                }
+            }
+
+            headerTitle(title = R.string.header_title_2)
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                items(DataSource.recommended){ recommended ->
+                    RecommendedItem(
+                        recommendedProd = recommended
+                    )
+                }
+            }
+
         }
     }
 }
 
 @Composable
 fun ProductItem(product: Product, modifier: Modifier = Modifier){
-    Card() {
-        Column() {
-            Image(
-                painter = painterResource(product.productImageRes) ,
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-            Text(
-                text = stringResource(product.productName)
-            )
-            Text(
-                text = String.format("%.1f", product.productPrice)
-            )
-            Row() {
-                Text(
-                    text = stringResource(R.string.see_details)
-                )
-                Box(
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.cardColor)
+        ),
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(10.dp)
+            ) {
+                Image(
+                    painter = painterResource(product.productImageRes) ,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .background(Color.Green)
-                        .clip(RoundedCornerShape(100.dp))
-                ){
-                    Icon(
-                        Icons.Default.KeyboardArrowRight,
-                        contentDescription = null,
-                        tint = Color.White
+                        .size(150.dp)
+                )
+                Text(
+                    text = stringResource(product.productName),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = String.format("%.1f", product.productPrice)
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = stringResource(R.string.see_details),
                     )
+                    Box(
+                        modifier = Modifier
+                    ){
+                        Icon(
+                            Icons.Default.KeyboardArrowRight,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
                 }
             }
         }
     }
+}
+
+@Composable
+fun RecommendedItem(recommendedProd: Recommended, modifier: Modifier = Modifier){
+    Image(
+        painter = painterResource(recommendedProd.imageRes) ,
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .height(80.dp)
+            .width(100.dp)
+    )
 }
 
 @Composable
@@ -120,6 +190,9 @@ fun Category(category: Category, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
+            colors = CardDefaults.cardColors(
+                containerColor = colorResource(R.color.cardColor)
+            ),
             modifier = modifier
         ) {
             Image(
@@ -137,15 +210,26 @@ fun Category(category: Category, modifier: Modifier = Modifier) {
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditText(modifier: Modifier = Modifier){
+fun SearchBar(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit
+){
     TextField(
-        value = "" ,
-        onValueChange = {},
+        value = value ,
+        onValueChange = onValueChange,
         label = { Text(text = "Search")},
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 21.dp)
+            .padding(vertical = 20.dp),
+        shape = RoundedCornerShape(50.dp),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = colorResource(R.color.cardColor),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        )
     )
 }
 @Composable
@@ -153,7 +237,9 @@ fun headerTitle(@StringRes title: Int, modifier: Modifier = Modifier){
     Text(
         text = stringResource(title),
         fontSize = 20.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .padding(vertical = 20.dp)
     )
 }
 

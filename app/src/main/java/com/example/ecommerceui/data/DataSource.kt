@@ -3,6 +3,7 @@ package com.example.ecommerceui.data
 import com.example.ecommerceui.R
 import com.example.ecommerceui.models.Category
 import com.example.ecommerceui.models.Product
+import com.example.ecommerceui.models.Recommended
 
 object DataSource {
     val categories = listOf<Category>(
@@ -15,5 +16,11 @@ object DataSource {
     val products = listOf<Product>(
         Product(R.drawable.ellipse2, R.string.product_name_1, 7.2),
         Product(R.drawable.ellipse3, R.string.product_name_2, 6.2),
+    )
+
+    val recommended = listOf<Recommended>(
+        Recommended(R.drawable.rectangle10),
+        Recommended(R.drawable.rectangle9),
+        Recommended(R.drawable.rectangle8)
     )
 }
