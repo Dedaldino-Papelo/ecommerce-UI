@@ -2,8 +2,8 @@ package com.example.ecommerceui.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -157,15 +158,13 @@ fun ProductItem(product: Product, modifier: Modifier = Modifier){
                     Text(
                         text = stringResource(R.string.see_details),
                     )
-                    Box(
-                        modifier = Modifier
-                    ){
                         Icon(
                             Icons.Default.KeyboardArrowRight,
                             contentDescription = null,
-                            tint = Color.White
+                            tint = Color.White,
+                            modifier = Modifier
+                                .background(colorResource(R.color.defautColor), CircleShape),
                         )
-                    }
                 }
             }
         }
