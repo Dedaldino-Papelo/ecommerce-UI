@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.ecommerceui.ui.theme.EcommerceUITheme
 
 @Composable
-fun ProductDetails(modifier: Modifier = Modifier){
+fun ProductDetailScreen(modifier: Modifier = Modifier){
     Text(
         text = "Details Screen",
         textAlign = TextAlign.Center,
@@ -20,8 +20,8 @@ fun ProductDetails(modifier: Modifier = Modifier){
 
 @Preview(showBackground = true)
 @Composable
-fun ProductDetails() {
+fun ProductDetailsPreview() {
     EcommerceUITheme {
-        ProductDetails()
+        ProductDetailScreen()
     }
 }

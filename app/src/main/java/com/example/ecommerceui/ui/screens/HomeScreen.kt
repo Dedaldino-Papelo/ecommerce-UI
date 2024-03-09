@@ -24,6 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -44,6 +45,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.ecommerceui.NavigationScreen
 import com.example.ecommerceui.R
 import com.example.ecommerceui.data.DataSource
 import com.example.ecommerceui.models.Category
@@ -52,7 +56,9 @@ import com.example.ecommerceui.models.Recommended
 import com.example.ecommerceui.ui.theme.EcommerceUITheme
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier) {
     var inputValue by remember { mutableStateOf("") }
 
     Column(
@@ -92,11 +98,12 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ){
                 items(DataSource.products){ product ->
                     ProductItem(
-                        product = product
+                        product = product,
+                        onClick = { navController.navigate(NavigationScreen.Details.name) }
                     )
                 }
             }
@@ -120,7 +127,11 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ProductItem(product: Product, modifier: Modifier = Modifier){
+fun ProductItem(
+    product: Product,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier){
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.cardColor)
@@ -154,18 +165,23 @@ fun ProductItem(product: Product, modifier: Modifier = Modifier){
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = stringResource(R.string.see_details),
                     )
                     Spacer(modifier = Modifier.width(20.dp))
+                    IconButton(
+                        onClick = onClick
+                    ) {
                         Icon(
                             Icons.Default.KeyboardArrowRight,
                             contentDescription = null,
                             tint = Color.White,
                             modifier = Modifier
-                                .background(colorResource(R.color.defautColor), CircleShape),
+                                .background(colorResource(R.color.defautColor), CircleShape)
                         )
+                    }
                 }
             }
         }
@@ -253,6 +269,6 @@ fun headerTitle(@StringRes title: Int, modifier: Modifier = Modifier){
 @Composable
 fun GreetingPreview() {
     EcommerceUITheme {
-        HomeScreen()
+        HomeScreen(navController = rememberNavController())
     }
 }
