@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -153,11 +154,11 @@ fun ProductItem(product: Product, modifier: Modifier = Modifier){
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
                         text = stringResource(R.string.see_details),
                     )
+                    Spacer(modifier = Modifier.width(20.dp))
                         Icon(
                             Icons.Default.KeyboardArrowRight,
                             contentDescription = null,
