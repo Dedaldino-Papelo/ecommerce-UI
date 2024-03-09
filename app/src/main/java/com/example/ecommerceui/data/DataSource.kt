@@ -17,8 +17,8 @@ object DataSource {
     )
 
     val products = listOf<Product>(
-        Product(R.drawable.ellipse2, R.string.product_name_1, 7.2),
-        Product(R.drawable.ellipse3, R.string.product_name_2, 6.2),
+        Product("1", R.drawable.ellipse2, R.string.product_name_1, 7.2),
+        Product("2", R.drawable.ellipse3, R.string.product_name_2, 6.2),
     )
 
     val recommended = listOf<Recommended>(

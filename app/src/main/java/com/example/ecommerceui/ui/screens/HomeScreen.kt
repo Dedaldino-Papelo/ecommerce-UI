@@ -45,9 +45,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.ecommerceui.NavigationScreen
 import com.example.ecommerceui.R
 import com.example.ecommerceui.data.DataSource
 import com.example.ecommerceui.models.Category
@@ -57,7 +54,7 @@ import com.example.ecommerceui.ui.theme.EcommerceUITheme
 
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
+    onProductClick: (Product) -> Unit,
     modifier: Modifier = Modifier) {
     var inputValue by remember { mutableStateOf("") }
 
@@ -103,7 +100,7 @@ fun HomeScreen(
                 items(DataSource.products){ product ->
                     ProductItem(
                         product = product,
-                        onClick = { navController.navigate(NavigationScreen.Details.name) }
+                        onClick = { onProductClick(product) }
                     )
                 }
             }
@@ -269,6 +266,6 @@ fun headerTitle(@StringRes title: Int, modifier: Modifier = Modifier){
 @Composable
 fun GreetingPreview() {
     EcommerceUITheme {
-        HomeScreen(navController = rememberNavController())
+        HomeScreen(onProductClick = {})
     }
 }

@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerceui.data.DataSource
 import com.example.ecommerceui.ui.screens.HomeScreen
 import com.example.ecommerceui.ui.screens.ProductDetailScreen
 
@@ -67,13 +68,23 @@ fun NavigationApp(navController: NavHostController = rememberNavController()){
                 .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-        ){
-            composable(route = NavigationScreen.Start.name){
-                HomeScreen(navController = navController)
+        ) {
+            composable(route = NavigationScreen.Start.name) {
+                HomeScreen(
+                    onProductClick = { product ->
+                        navController.navigate("${NavigationScreen.Details.name}/${product.productId}")
+                    }
+                )
             }
 
-            composable(route = NavigationScreen.Details.name){
-                ProductDetailScreen()
+            composable(route = "${NavigationScreen.Details.name}/{productId}") { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId")
+                val product = DataSource.products.find { it.productId == productId }
+                if (product != null) {
+                    ProductDetailScreen(product = product)
+                } else {
+                    //Do Something
+                }
             }
         }
     }
