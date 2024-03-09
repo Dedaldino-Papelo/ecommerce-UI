@@ -1,38 +1,37 @@
 package com.example.ecommerceui.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.ecommerceui.R
-import com.example.ecommerceui.models.Product
 import com.example.ecommerceui.ui.theme.EcommerceUITheme
 
 @Composable
-fun ProductDetailScreen(product: Product, modifier: Modifier = Modifier) {
+fun OrderScreen(modifier: Modifier = Modifier){
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.defautColor))
+            .background(colorResource(R.color.defautColor)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = stringResource(product.productName))
+        Text(
+            text = "OrderScreen"
+        )
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun ProductDetailsPreview() {
+fun OrderPreview(){
     EcommerceUITheme {
-        ProductDetailScreen(
-            product = Product(
-                "1",
-                R.drawable.ellipse2,
-                R.string.product_name_1,
-                7.2))
+        OrderScreen()
     }
 }

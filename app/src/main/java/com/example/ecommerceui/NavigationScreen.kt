@@ -2,8 +2,6 @@ package com.example.ecommerceui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -21,11 +19,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ecommerceui.data.DataSource
 import com.example.ecommerceui.ui.screens.HomeScreen
+import com.example.ecommerceui.ui.screens.OrderScreen
 import com.example.ecommerceui.ui.screens.ProductDetailScreen
 
 enum class NavigationScreen(){
     Start,
-    Details
+    Details,
+    Order
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +67,6 @@ fun NavigationApp(navController: NavHostController = rememberNavController()){
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
         ) {
             composable(route = NavigationScreen.Start.name) {
                 HomeScreen(
@@ -85,6 +84,10 @@ fun NavigationApp(navController: NavHostController = rememberNavController()){
                 } else {
                     //Do Something
                 }
+            }
+
+            composable(route = NavigationScreen.Order.name) {
+                OrderScreen()
             }
         }
     }
