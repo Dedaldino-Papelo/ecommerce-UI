@@ -18,7 +18,7 @@ fun OrderScreen(modifier: Modifier = Modifier){
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.defautColor)),
+            .background(colorResource(R.color.default_color)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

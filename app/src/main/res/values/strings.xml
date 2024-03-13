@@ -15,4 +15,7 @@
     <string name="product_price_2">6.2</string>
     <string name="see_details">See Details</string>
 
+    <string name="product_desc1">Rice Noodles with shrimps,egg,pork,choy,cabbage.Noodles fave or trying something completely new, we want your tastebuds to be your happy buds. </string>
+
+    <string name="btn_add_cart">Add to cart</string>
 </resources>

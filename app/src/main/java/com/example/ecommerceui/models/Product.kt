@@ -7,5 +7,6 @@ data class Product(
     val productId: String,
     @DrawableRes val productImageRes: Int,
     @StringRes val productName: Int,
+    @StringRes val productDesc: Int,
     val productPrice: Double
 )

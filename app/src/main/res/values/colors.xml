@@ -8,5 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="cardColor">#F4E4CD</color>
-    <color name="defautColor">#419F7D</color>
+    <color name="default_color">#419F7D</color>
+    <color name="star_color">#FFAF51</color>
 </resources>

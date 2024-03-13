@@ -176,7 +176,7 @@ fun ProductItem(
                             contentDescription = null,
                             tint = Color.White,
                             modifier = Modifier
-                                .background(colorResource(R.color.defautColor), CircleShape)
+                                .background(colorResource(R.color.default_color), CircleShape)
                         )
                     }
                 }
