@@ -10,4 +10,5 @@
     <color name="cardColor">#F4E4CD</color>
     <color name="default_color">#419F7D</color>
     <color name="star_color">#FFAF51</color>
+    <color name="grey_color">#939090</color>
 </resources>

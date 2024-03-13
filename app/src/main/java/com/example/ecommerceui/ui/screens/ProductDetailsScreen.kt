@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,7 +67,7 @@ fun ProductDetailScreen(product: Product, modifier: Modifier = Modifier) {
                 Text(
                     text = stringResource(product.productDesc),
                     textAlign = TextAlign.Center,
-                    fontSize = 13.sp,
+                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(top = 150.dp)
                 )
@@ -99,7 +100,11 @@ fun ProductLocalization(modifier: Modifier = Modifier){
             )
             Column {
                 Text(text = "Chin Club", fontSize = 14.sp)
-                Text(text = "3.1 km from you", fontSize = 13.sp)
+                Text(
+                    text = "3.1 km from you",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = colorResource(R.color.grey_color)
+                )
             }
         }
 
@@ -119,8 +124,12 @@ fun ProductDetail(productName: Int, modifier: Modifier = Modifier){
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
     ){
-        Column() {
-            Text(text = stringResource(productName))
+        Column {
+            Text(
+                text = stringResource(productName),
+                style = MaterialTheme.typography.displayMedium,
+                fontSize = 24.sp
+            )
             Text(text = "300g/530 kcal")
         }
         Text(text = "1 portion")
@@ -136,7 +145,7 @@ fun PriceAndButton(modifier: Modifier = Modifier){
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column() {
+        Column {
             Text(text = "Price")
             Text(text = "$7,50")
         }
@@ -150,7 +159,10 @@ fun PriceAndButton(modifier: Modifier = Modifier){
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(R.string.btn_add_cart))
+                Text(
+                    text = stringResource(R.string.btn_add_cart),
+                    style = MaterialTheme.typography.bodyLarge
+                )
                 Spacer(modifier = modifier.width(15.dp))
                 Icon(
                     Icons.Filled.AddCircle,
