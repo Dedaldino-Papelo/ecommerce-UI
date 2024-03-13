@@ -63,7 +63,6 @@ fun ProductDetailScreen(product: Product, modifier: Modifier = Modifier) {
                 .clip(shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
                 .background(colorResource(R.color.white)),
         ) {
-
                 Text(
                     text = stringResource(product.productDesc),
                     textAlign = TextAlign.Center,
@@ -72,52 +71,59 @@ fun ProductDetailScreen(product: Product, modifier: Modifier = Modifier) {
                         .padding(top = 150.dp)
                 )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 19.dp, horizontal = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
-                ){
-                    Column() {
-                        Text(text = stringResource(product.productName))
-                        Text(text = "300g/530 kcal")
-                    }
-                    Text(text = "1 portion")
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Row(
-                        modifier = Modifier,
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Icon(painter = painterResource(R.drawable.hebei_fc),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width(35.dp)
-                                .height(39.dp)
-                        )
-                        Column {
-                            Text(text = "Chin Club", fontSize = 14.sp)
-                            Text(text = "3.1 km from you", fontSize = 13.sp)
-                        }
-                    }
-
-                    Icon(
-                        Icons.Filled.Star,
-                        tint = colorResource(R.color.star_color),
-                        contentDescription = null
-                    )
-                }
-
+                ProductDetail(productName = product.productName)
+                ProductLocalization()
                 PriceAndButton()
         }
+    }
+}
+
+@Composable
+fun ProductLocalization(modifier: Modifier = Modifier){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Row(
+            modifier = Modifier,
+            verticalAlignment = Alignment.Top
+        ) {
+            Icon(painter = painterResource(R.drawable.hebei_fc),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(35.dp)
+                    .height(39.dp)
+            )
+            Column {
+                Text(text = "Chin Club", fontSize = 14.sp)
+                Text(text = "3.1 km from you", fontSize = 13.sp)
+            }
+        }
+
+        Icon(
+            Icons.Filled.Star,
+            tint = colorResource(R.color.star_color),
+            contentDescription = null
+        )
+    }
+}
+@Composable
+fun ProductDetail(productName: Int, modifier: Modifier = Modifier){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 19.dp, horizontal = 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
+    ){
+        Column() {
+            Text(text = stringResource(productName))
+            Text(text = "300g/530 kcal")
+        }
+        Text(text = "1 portion")
     }
 }
 

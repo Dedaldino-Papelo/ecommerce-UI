@@ -41,7 +41,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,8 +67,15 @@ fun HomeScreen(
                 .padding(horizontal = 30.dp)
         ) {
             Column() {
-                Text(text = "Hi James",  style = MaterialTheme.typography.titleLarge)
-                Text(text = "What do you want to order today?",  style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = stringResource(R.string.name),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = stringResource(R.string.what_do_you_want),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 12.sp
+                )
             }
             SearchBar(
                 modifier = Modifier,
@@ -153,7 +159,7 @@ fun ProductItem(
                 Text(
                     text = stringResource(product.productName),
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.displayMedium
                 )
                 Text(
                     text = String.format("%.1f", product.productPrice)
@@ -166,6 +172,7 @@ fun ProductItem(
                 ) {
                     Text(
                         text = stringResource(R.string.see_details),
+                        style = MaterialTheme.typography.bodyLarge
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     IconButton(
@@ -218,7 +225,12 @@ fun Category(category: Category, modifier: Modifier = Modifier) {
                 contentScale = ContentScale.Crop
             )
         }
-        Text(text = stringResource(category.categoryName))
+        Text(
+            text = stringResource(category.categoryName),
+            style = MaterialTheme.typography.bodyLarge,
+            fontSize = 14.sp
+        )
+
     }
 }
 
@@ -255,8 +267,7 @@ fun SearchBar(
 fun headerTitle(@StringRes title: Int, modifier: Modifier = Modifier){
     Text(
         text = stringResource(title),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
+        style = MaterialTheme.typography.displayMedium,
         modifier = Modifier
             .padding(vertical = 20.dp)
     )

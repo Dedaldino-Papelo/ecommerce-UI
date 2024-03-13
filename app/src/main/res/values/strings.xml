@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">Ecommerce UI</string>
+    <string name="app_name">Food Delivery</string>
+
+    <string name="name">Hi Dedaldino</string>
+    <string name="what_do_you_want">What do you want to order today?</string>
+
     <string name="category_name_1">All</string>
     <string name="category_name_2">Italian</string>
     <string name="category_name_3">Thai</string>
