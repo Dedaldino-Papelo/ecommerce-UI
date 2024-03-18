@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,21 +41,12 @@ fun EcommerceAppBar(
     TopAppBar(
         title = {  },
         navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Localized description"
-                    )
-                }
-            } else {
                 IconButton(onClick = { }) {
                     Icon(
                         imageVector = Icons.Filled.Menu,
                         contentDescription = "Localized description"
                     )
                 }
-            }
         },
         actions = {
             IconButton(onClick = {}) {
@@ -73,8 +63,8 @@ fun EcommerceAppBar(
 
 @Composable
 fun NavigationApp(navController: NavHostController = rememberNavController()){
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     Scaffold(
         topBar = {
