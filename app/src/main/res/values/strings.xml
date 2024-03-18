@@ -22,4 +22,6 @@
     <string name="product_desc1">Rice Noodles with shrimps,egg,pork,choy,cabbage.Noodles fave or trying something completely new, we want your tastebuds to be your happy buds. </string>
 
     <string name="btn_add_cart">Add to cart</string>
+    <string name="product_details">Product Details</string>
+    <string name="product_order">Order</string>
 </resources>
