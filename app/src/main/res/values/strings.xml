@@ -24,4 +24,8 @@
     <string name="btn_add_cart">Add to cart</string>
     <string name="product_details">Product Details</string>
     <string name="product_order">Order</string>
+
+    <string name="back">Back</string>
+    <string name="menu">Menu</string>
+
 </resources>
