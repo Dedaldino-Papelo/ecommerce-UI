@@ -1,6 +1,8 @@
 package com.example.ecommerceui
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -43,7 +45,6 @@ fun EcommerceAppBar(
     currentScreen: NavigationScreen,
     navigateUp: () -> Unit,
     canNavigateBack: Boolean,
-    modifier: Modifier = Modifier
 ){
     TopAppBar(
         title = { },
@@ -52,6 +53,7 @@ fun EcommerceAppBar(
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
+                        tint = if (currentScreen.title == R.string.product_details ) Color.White else Color.Black,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -59,6 +61,7 @@ fun EcommerceAppBar(
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.Menu,
+                        tint = if (currentScreen.title == R.string.product_details ) Color.White else Color.Black,
                         contentDescription = stringResource(R.string.menu)
                     )
                 }
@@ -68,68 +71,78 @@ fun EcommerceAppBar(
             IconButton(onClick = {}) {
                 Icon(
                     imageVector = Icons.Filled.ShoppingCart,
+                    tint = if (currentScreen.title == R.string.product_details ) Color.White else Color.Black,
                     contentDescription = "Localized description"
                 )
             }
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor =
-            if(currentScreen.title !== R.string.app_name)
+            if(currentScreen.title != R.string.app_name)
                 colorResource(R.color.default_color)
             else Color.Transparent
         )
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NavigationApp(){
-    val viewModel: HomeViewModel = viewModel()
-    val navController = rememberNavController()
+    SharedTransitionLayout {
+        val viewModel: HomeViewModel = viewModel()
+        val navController = rememberNavController()
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = NavigationScreen.valueOf(
-        navBackStackEntry?.destination?.route ?: NavigationScreen.Start.name
-    )
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentScreen = NavigationScreen.valueOf(
+            navBackStackEntry?.destination?.route ?: NavigationScreen.Start.name
+        )
 
-    Scaffold(
-        topBar = {
-            EcommerceAppBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
-            )
-        }
-    ) { innerPadding ->
-        val uiState by viewModel.uiSTate.collectAsState()
-
-        NavHost(
-            navController = navController,
-            startDestination = NavigationScreen.Start.name,
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            composable(route = NavigationScreen.Start.name) {
-                HomeScreen(
-                    onProductClick = { product ->
-                        viewModel.setProductById(product.productId)
-                        navController.navigate(NavigationScreen.Details.name)
-                    }
+        Scaffold(
+            topBar = {
+                EcommerceAppBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() }
                 )
             }
+        ) { innerPadding ->
+            val uiState by viewModel.uiSTate.collectAsState()
 
-            composable(route = NavigationScreen.Details.name) { backStackEntry ->
-                val productId = uiState.productId
-                val product = DataSource.products.find { it.productId == productId }
-                if (product != null) {
-                    ProductDetailScreen(product = product)
-                } else {
+            NavHost(
+                navController = navController,
+                startDestination = NavigationScreen.Start.name,
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+            ) {
+                composable(route = NavigationScreen.Start.name) {
+                    HomeScreen(
+                        onProductClick = { product ->
+                            viewModel.setProductById(product.productId)
+                            navController.navigate(NavigationScreen.Details.name)
+                        },
+                        sharedTransitionScope = this@SharedTransitionLayout,
+                        animatedVisibilityScope = this
+                    )
                 }
-            }
 
-            composable(route = NavigationScreen.Order.name) {
-                OrderScreen()
+                composable(route = NavigationScreen.Details.name) { _ ->
+                    val productId = uiState.productId
+                    val product = DataSource.products.find { it.productId == productId }
+                    if (product != null) {
+                        ProductDetailScreen(
+                            product = product,
+                            sharedTransitionScope = this@SharedTransitionLayout,
+                            animatedVisibilityScope = this
+                        )
+                    }
+                }
+
+                composable(route = NavigationScreen.Order.name) {
+                    OrderScreen()
+                }
             }
         }
     }
+
 }

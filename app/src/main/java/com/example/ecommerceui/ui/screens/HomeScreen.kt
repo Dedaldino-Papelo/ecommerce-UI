@@ -1,9 +1,14 @@
 package com.example.ecommerceui.ui.screens
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,7 +48,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ecommerceui.R
@@ -51,16 +55,19 @@ import com.example.ecommerceui.data.DataSource
 import com.example.ecommerceui.models.Category
 import com.example.ecommerceui.models.Product
 import com.example.ecommerceui.models.Recommended
-import com.example.ecommerceui.ui.theme.EcommerceUITheme
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun HomeScreen(
     onProductClick: (Product) -> Unit,
-    modifier: Modifier = Modifier) {
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    modifier: Modifier = Modifier
+) {
     var inputValue by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
@@ -91,8 +98,8 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(36.dp)
-            ){
-                items(DataSource.categories){ category ->
+            ) {
+                items(DataSource.categories) { category ->
                     Category(
                         category = category,
                         modifier = Modifier
@@ -100,17 +107,19 @@ fun HomeScreen(
                 }
             }
 
-            headerTitle(title = R.string.header_title_1,)
+            headerTitle(title = R.string.header_title_1)
 
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ){
-                items(DataSource.products){ product ->
+            ) {
+                items(DataSource.products) { product ->
                     ProductItem(
                         product = product,
-                        onClick = { onProductClick(product) }
+                        onClick = { onProductClick(product) },
+                        sharedTransitionScope = sharedTransitionScope,
+                        animatedVisibilityScope = animatedVisibilityScope
                     )
                 }
             }
@@ -121,8 +130,8 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                items(DataSource.recommended){ recommended ->
+            ) {
+                items(DataSource.recommended) { recommended ->
                     RecommendedItem(
                         recommendedProd = recommended
                     )
@@ -133,11 +142,15 @@ fun HomeScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun ProductItem(
     product: Product,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier){
+    modifier: Modifier = Modifier,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
+) {
 
     Card(
         colors = CardDefaults.cardColors(
@@ -153,18 +166,27 @@ fun ProductItem(
                 modifier = Modifier
                     .padding(10.dp)
             ) {
-                Image(
-                    painter = painterResource(product.productImageRes) ,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(150.dp)
-                )
-                Text(
-                    text = stringResource(product.productName),
-                    fontSize = 20.sp,
-                    style = MaterialTheme.typography.displayMedium
-                )
+                with(sharedTransitionScope) {
+                    Image(
+                        modifier = Modifier
+                            .sharedElement(
+                                state = rememberSharedContentState(key = "image-${product.productId}"),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 1000)
+                                }
+                            )
+                            .size(150.dp),
+                        painter = painterResource(product.productImageRes),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                    )
+                    Text(
+                        text = stringResource(product.productName),
+                        fontSize = 20.sp,
+                        style = MaterialTheme.typography.displayMedium
+                    )
+                }
                 Text(
                     text = String.format("%.1f", product.productPrice)
                 )
@@ -197,9 +219,9 @@ fun ProductItem(
 }
 
 @Composable
-fun RecommendedItem(recommendedProd: Recommended, modifier: Modifier = Modifier){
+fun RecommendedItem(recommendedProd: Recommended, modifier: Modifier = Modifier) {
     Image(
-        painter = painterResource(recommendedProd.imageRes) ,
+        painter = painterResource(recommendedProd.imageRes),
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = Modifier
@@ -214,18 +236,18 @@ fun Category(category: Category, modifier: Modifier = Modifier) {
         modifier = Modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = colorResource(R.color.cardColor)
-            ),
+        Box(
             modifier = modifier
+                .background(colorResource(R.color.cardColor), shape = RoundedCornerShape(15.dp))
+                .width(53.dp)
+                .height(40.dp),
+            contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(category.imageRes),
                 contentDescription = "",
                 modifier = Modifier
-                    .padding(15.dp)
-                    .size(30.dp),
+                    .size(25.dp),
                 contentScale = ContentScale.Crop
             )
         }
@@ -239,23 +261,24 @@ fun Category(category: Category, modifier: Modifier = Modifier) {
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit
-){
+) {
     TextField(
-        value = value ,
+        value = value,
         onValueChange = onValueChange,
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
                 contentDescription = null,
-                tint = Color.Gray) },
-        label = { Text(text = "Search")},
+                tint = Color.Gray
+            )
+        },
+        label = { Text(text = "Search") },
         shape = RoundedCornerShape(50.dp),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = colorResource(R.color.cardColor),
@@ -267,8 +290,9 @@ fun SearchBar(
             .padding(vertical = 20.dp),
     )
 }
+
 @Composable
-fun headerTitle(@StringRes title: Int, modifier: Modifier = Modifier){
+fun headerTitle(@StringRes title: Int, modifier: Modifier = Modifier) {
     Text(
         text = stringResource(title),
         style = MaterialTheme.typography.displayMedium,
@@ -277,10 +301,14 @@ fun headerTitle(@StringRes title: Int, modifier: Modifier = Modifier){
     )
 }
 
+/*
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     EcommerceUITheme {
-        HomeScreen(onProductClick = {})
+            HomeScreen(
+                onProductClick = {},
+            )
     }
-}
+}*/

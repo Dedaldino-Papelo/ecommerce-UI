@@ -1,5 +1,9 @@
 package com.example.ecommerceui.ui.screens
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,32 +36,44 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.ecommerceui.R
 import com.example.ecommerceui.models.Product
-import com.example.ecommerceui.ui.theme.EcommerceUITheme
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ProductDetailScreen(product: Product, modifier: Modifier = Modifier) {
+fun ProductDetailScreen(
+    product: Product,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(colorResource(R.color.default_color))
     ) {
-        Image(
-            painter = painterResource(product.productImageRes) ,
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .size(272.dp)
-                .offset(y = 150.dp)
-                .zIndex(1f),
-            contentScale = ContentScale.Crop
-        )
-        Spacer(modifier = modifier.height(20.dp))
+        with(sharedTransitionScope){
+            Image(
+                painter = painterResource(product.productImageRes) ,
+                contentDescription = null,
+                modifier = Modifier
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "image-${product.productId}"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 1000)
+                        }
+                    )
+                    .align(Alignment.CenterHorizontally)
+                    .size(272.dp)
+                    .offset(y = 100.dp)
+                    .zIndex(1f),
+                contentScale = ContentScale.Crop
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -69,10 +85,12 @@ fun ProductDetailScreen(product: Product, modifier: Modifier = Modifier) {
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
-                        .padding(top = 150.dp)
+                        .padding(top = 100.dp)
                 )
 
-                ProductDetail(productName = product.productName)
+                ProductDetail(
+                    productName = product.productName,
+                )
                 ProductLocalization()
                 PriceAndButton()
         }
@@ -82,7 +100,7 @@ fun ProductDetailScreen(product: Product, modifier: Modifier = Modifier) {
 @Composable
 fun ProductLocalization(modifier: Modifier = Modifier){
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -115,21 +133,25 @@ fun ProductLocalization(modifier: Modifier = Modifier){
         )
     }
 }
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ProductDetail(productName: Int, modifier: Modifier = Modifier){
+fun ProductDetail(
+    productName: Int,
+    modifier: Modifier = Modifier
+){
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 19.dp, horizontal = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
     ){
         Column {
-            Text(
-                text = stringResource(productName),
-                style = MaterialTheme.typography.displayMedium,
-                fontSize = 24.sp
-            )
+                Text(
+                    text = stringResource(productName),
+                    style = MaterialTheme.typography.displayMedium,
+                    fontSize = 24.sp
+                )
             Text(text = "300g/530 kcal")
         }
         Text(text = "1 portion")
@@ -174,6 +196,7 @@ fun PriceAndButton(modifier: Modifier = Modifier){
     }
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun ProductDetailsPreview() {
@@ -186,4 +209,4 @@ fun ProductDetailsPreview() {
                 R.string.product_desc1,
                 7.2))
     }
-}
+}*/
