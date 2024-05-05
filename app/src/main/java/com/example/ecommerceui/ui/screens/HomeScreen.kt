@@ -5,6 +5,8 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -182,6 +184,16 @@ fun ProductItem(
                         contentScale = ContentScale.Crop,
                     )
                     Text(
+                        modifier = Modifier
+                            .sharedBounds(
+                                rememberSharedContentState(key = "text-${product.productName}"),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 1000)
+                                },
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ),
                         text = stringResource(product.productName),
                         fontSize = 20.sp,
                         style = MaterialTheme.typography.displayMedium

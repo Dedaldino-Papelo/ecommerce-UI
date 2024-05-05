@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -90,6 +92,8 @@ fun ProductDetailScreen(
 
                 ProductDetail(
                     productName = product.productName,
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope
                 )
                 ProductLocalization()
                 PriceAndButton()
@@ -137,6 +141,8 @@ fun ProductLocalization(modifier: Modifier = Modifier){
 @Composable
 fun ProductDetail(
     productName: Int,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier
 ){
     Row(
@@ -147,11 +153,23 @@ fun ProductDetail(
         verticalAlignment = Alignment.Bottom
     ){
         Column {
+            with(sharedTransitionScope){
                 Text(
+                    modifier = Modifier
+                        .sharedBounds(
+                            rememberSharedContentState(key = "text-${productName}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = 1000)
+                            },
+                            enter = fadeIn(),
+                            exit = fadeOut()
+                        ),
                     text = stringResource(productName),
                     style = MaterialTheme.typography.displayMedium,
                     fontSize = 24.sp
                 )
+            }
             Text(text = "300g/530 kcal")
         }
         Text(text = "1 portion")
